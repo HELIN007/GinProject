@@ -29,6 +29,6 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": code,
 		"msg":    errmsg.GetErrMsg(code),
-		"token":  token,
+		"data":   map[string]string{"token": token},
 	})
 }
