@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"GinProject/model"
 	"GinProject/utils"
 	"GinProject/utils/errmsg"
 	"fmt"
@@ -12,13 +13,12 @@ import (
 )
 
 var JwtKey = []byte(utils.JwtKey)
+var code int
 
 type MyClaims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }
-
-//TODO Redis解决token过期问题
 
 // SetToken 生成Token
 func SetToken(username string) (string, int) {
@@ -41,6 +41,12 @@ func SetToken(username string) (string, int) {
 
 // ParseToken 解析token
 func ParseToken(token string) (*MyClaims, int) {
+	Infof("校验redis中的token是否存在")
+	code = model.CheckRedisToken(token)
+	if code != errmsg.SUCCESS {
+		Infof("校验redis中的token不存在")
+		return nil, errmsg.ErrorTokenRedis
+	}
 	//可能会过期
 	setToken, err := jwt.ParseWithClaims(token, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return JwtKey, nil
@@ -56,8 +62,6 @@ func ParseToken(token string) (*MyClaims, int) {
 		return nil, errmsg.ERROR
 	}
 }
-
-var code int
 
 // JwtToken jwt中间件
 func JwtToken() gin.HandlerFunc {
@@ -98,6 +102,7 @@ func JwtToken() gin.HandlerFunc {
 			return
 		}
 		c.Set("username", key.Username)
+		//校验redis中是否有这个token
 		c.Next()
 	}
 }

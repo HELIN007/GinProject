@@ -13,6 +13,7 @@ const (
 	ErrorTokenTypeWrong = 1007
 	ErrorUserNoRight    = 1008
 	ErrorTokenDel       = 1009
+	ErrorTokenRedis     = 1010
 	//文章模块的错误code=2000...
 	ErrorArticleExist = 2001
 	//分类模块的错误code=3000...
@@ -35,6 +36,7 @@ var codeMsg = map[int]string{
 	ErrorCategoryNotExist: "分类不存在",
 	ErrorUserNoRight:      "用户无权限",
 	ErrorTokenDel:         "token清除失败",
+	ErrorTokenRedis:       "redis中不存在该token",
 }
 
 func GetErrMsg(code int) string {

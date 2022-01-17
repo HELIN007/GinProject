@@ -1,2 +1,5 @@
 tmp
 .idea
+log
+latest_log.log
+zap_latest_log.log

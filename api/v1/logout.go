@@ -11,7 +11,9 @@ import (
 func Logout(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
+	token, _ := model.Rdb.Get(c, data.Username).Result()
 	err := model.Rdb.Del(c, data.Username).Err()
+	_ = model.Rdb.Del(c, token).Err()
 	if err != nil {
 		code = errmsg.ErrorTokenDel
 		middleware.Infof("用户%v正在退出登录，清除token失败，原因是：%v", data.Username, err)

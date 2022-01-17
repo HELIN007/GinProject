@@ -1,7 +1,6 @@
 package model
 
 import (
-	"GinProject/middleware"
 	"GinProject/utils"
 	"context"
 	"fmt"
@@ -63,9 +62,11 @@ func InitRedis() {
 	})
 	pong, err := Rdb.Ping(ctx).Result()
 	if err != nil {
-		middleware.Infof("连接redis数据库错误，原因是 %v", err)
+		//middleware.Infof("连接redis数据库错误，原因是 %v", err)
+		fmt.Println("连接redis数据库错误，原因是: ", err)
 		return
 	} else {
-		middleware.Infof("连接redis成功！%v", pong)
+		//middleware.Infof("连接redis成功！%v", pong)
+		fmt.Println("连接redis成功, ", pong)
 	}
 }

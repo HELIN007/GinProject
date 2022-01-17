@@ -3,6 +3,7 @@ package model
 import (
 	"GinProject/utils/errmsg"
 	"encoding/base64"
+	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/scrypt"
 	"gorm.io/gorm"
 	"log"
@@ -108,19 +109,21 @@ func CheckLogin(username string, password string) int {
 	if ScryptPwd(password) != user.Password {
 		return errmsg.ErrorPasswordWrong
 	}
-	if user.Role != 2 {
+	if user.Role != 0 {
 		return errmsg.ErrorUserNoRight
 	}
 	return errmsg.SUCCESS
 }
 
-//var c *gin.Context
-//token校验
-//func CheckToken(username string) int {
-//	_, err := Rdb.Keys(c, username).Result()
-//	if err != nil {
-//		return errmsg.SUCCESS
-//	} else {
-//		return errmsg.ERROR
-//	}
-//}
+var c *gin.Context
+
+//查询token是否存在redis中
+func CheckRedisToken(key string) int {
+	//判断某个key值是否存在
+	_, err := Rdb.Exists(c, key).Result()
+	if err != nil {
+		return errmsg.SUCCESS
+	} else {
+		return errmsg.ErrorTokenRedis
+	}
+}
