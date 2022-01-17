@@ -26,6 +26,7 @@ func InitRouter() {
 		router.POST("user/add", v1.AddUser)
 		router.GET("users", v1.GetUsers)
 		router.POST("login", v1.Login)
+		router.POST("logout", v1.Logout)
 		//分类模块的路由
 		router.GET("category", v1.GetCategory)
 		//文章模块的路由

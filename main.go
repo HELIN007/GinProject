@@ -21,5 +21,6 @@ import (
 // @BasePath  /api/v1
 func main() {
 	model.InitDB()
+	model.InitRedis()
 	routes.InitRouter()
 }

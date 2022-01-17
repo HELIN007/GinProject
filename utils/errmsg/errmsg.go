@@ -12,6 +12,7 @@ const (
 	ErrorTokenWrong     = 1006
 	ErrorTokenTypeWrong = 1007
 	ErrorUserNoRight    = 1008
+	ErrorTokenDel       = 1009
 	//文章模块的错误code=2000...
 	ErrorArticleExist = 2001
 	//分类模块的错误code=3000...
@@ -33,6 +34,7 @@ var codeMsg = map[int]string{
 	ErrorCategoryUsed:     "分类已存在",
 	ErrorCategoryNotExist: "分类不存在",
 	ErrorUserNoRight:      "用户无权限",
+	ErrorTokenDel:         "token清除失败",
 }
 
 func GetErrMsg(code int) string {

@@ -1,8 +1,11 @@
 package model
 
 import (
+	"GinProject/middleware"
 	"GinProject/utils"
+	"context"
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -47,4 +50,22 @@ func InitDB() {
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间
 	sqlDB.SetConnMaxLifetime(time.Minute)
+}
+
+var Rdb *redis.Client
+var ctx = context.Background()
+
+func InitRedis() {
+	Rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+	pong, err := Rdb.Ping(ctx).Result()
+	if err != nil {
+		middleware.Infof("连接redis数据库错误，原因是 %v", err)
+		return
+	} else {
+		middleware.Infof("连接redis成功！%v", pong)
+	}
 }
