@@ -108,8 +108,19 @@ func CheckLogin(username string, password string) int {
 	if ScryptPwd(password) != user.Password {
 		return errmsg.ErrorPasswordWrong
 	}
-	if user.Role != 0 {
+	if user.Role != 2 {
 		return errmsg.ErrorUserNoRight
 	}
 	return errmsg.SUCCESS
 }
+
+//var c *gin.Context
+//token校验
+//func CheckToken(username string) int {
+//	_, err := Rdb.Keys(c, username).Result()
+//	if err != nil {
+//		return errmsg.SUCCESS
+//	} else {
+//		return errmsg.ERROR
+//	}
+//}
