@@ -4,14 +4,21 @@ import (
 	"GinProject/middleware"
 	"GinProject/model"
 	"GinProject/utils/errmsg"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
+type Username struct {
+	Username string `json:"username"`
+}
+
 func Logout(c *gin.Context) {
-	var data model.User
+	var data Username
 	_ = c.ShouldBindJSON(&data)
+	fmt.Println("======", data)
 	token, _ := model.Rdb.Get(c, data.Username).Result()
+	fmt.Println(data.Username, "的token是", token)
 	err := model.Rdb.Del(c, data.Username).Err()
 	_ = model.Rdb.Del(c, token).Err()
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"GinProject/middleware"
 	"GinProject/model"
 	"GinProject/utils/errmsg"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -22,10 +23,12 @@ func Login(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
 	var token string
+	fmt.Println("---", data.Username, data.Password)
 	code = model.CheckLogin(data.Username, data.Password)
 	if code == errmsg.SUCCESS {
 		token, code = middleware.SetToken(data.Username)
 		// 将token写入redis，时间是ns（1ms=10e6ns）
+		fmt.Printf("账号%v的token是%v\n", data.Username, token)
 		err := model.Rdb.Set(c, data.Username, token, 0).Err()
 		if err != nil {
 			middleware.Infof("将用户%v的token存入redis失败，原因是：", err)
